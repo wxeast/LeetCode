@@ -1,0 +1,66 @@
+#pragma once
+
+
+
+
+//插入排序 对链表排序
+ListNode *insertionSortList(ListNode *head) {
+	if(head == NULL&&head->next == NULL)
+	{
+		return head;
+	}
+	//sort表示的是有序序列的开始
+	ListNode*  sort =head;
+	while(sort->next)
+	{
+		sort =  sort->next;
+	}  
+	while(1)
+	{
+		ListNode* cur  = head;
+		ListNode* prev = cur;//prev表示的是有序序列的前一个 结点
+		while(prev->next != sort)
+		{
+			prev = prev->next; 
+		}
+		ListNode* tmp  = prev;
+		int data = tmp->val;
+		//要插入的数data大于 sort 就想走
+		while(sort&&data > sort->val)
+		{
+			tmp->val = sort->val;
+			sort = sort->next;
+			tmp = tmp->next;
+		}
+		tmp->val = data;
+		sort = prev;
+		if(sort == head )
+			return head;
+	}
+}
+
+void Test()
+{
+	ListNode *  l1 =  new ListNode(1);
+	ListNode *  l2 =  new ListNode(2);
+	ListNode *  l3 =  new ListNode(4);
+	ListNode *  l4 =  new ListNode(8);
+	ListNode *  l5 =  new ListNode(6);
+	ListNode *  l6 =  new ListNode(7);
+	ListNode *  l7 =  new ListNode(5);
+	l1->next = l2;
+	l2->next = l3;
+	l3->next = l4;
+	l4->next = l5;
+	l5->next = l6;
+	l6->next = l7;
+	ListNode* ret= insertionSortList(l1);
+
+
+}
+
+
+
+
+
+
