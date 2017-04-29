@@ -1,0 +1,84 @@
+#pragma once
+#include<vector>
+#include<map>
+//给定一个二维平面上的n个点，求出在同一直线上的点的最大值。
+struct Point
+{
+     int x;
+     int y;
+     Point() : x(0), y(0) {}
+     Point(int a, int b) : x(a), y(b) {}
+ };
+
+
+//[(84,250),(0,0),(1,0),(0,-70),(0,-70),(1,-1),(21,10),(42,90),(-42,-230)]
+int maxPoints(vector<Point> &points) 
+{
+	int size = points.size();
+	int ret  = 0;
+	map<float,int> mp ;//表示的是每次的在一条直线上的直线斜率还有点的个数
+	//将每一个点当成是直线的 一个点
+	for(int i =0  ;i < size;++i)
+	{
+		mp.clear();//每次进来要清空，保证每次的都是 
+		int count = 1 ;//表示的相同的 点的个数    初始值为1 要算上当前的点
+		mp[0] =  0;
+		//直线另一个点
+		for(int j = 0;j < size;++j)
+		{
+			if(i == j)continue;
+			if(points[i].x == points[j].x&&points[i].y == points[j].y)
+			{
+				count++;//两个结点相同；//两个点相同的话，肯定在同一条直线上
+				continue;
+			}
+			//然后计算直线的斜率，，，
+			float  k = (points[i].x == points[j].x)/*表示的是直线垂直于x轴*/
+				?/*斜率无限大*/1024
+				:(float)(points[i].y-points[j].y)/(points[i].x-points[j].x);
+			mp[k]++;
+		}
+		map<float,int>::iterator it = mp.begin();
+		while(it != mp.end())
+		{
+			if(it->second+count > ret)
+				ret = it->second+count;
+			++it;
+		}
+
+	}
+	return ret;
+}
+
+
+void Test()
+{
+	Point p1(84,250);
+	Point p2(0,0);
+	Point p3(1,0);
+	Point p4(0,-70);
+	Point p5(0,-70);
+	Point p6(1,-1);
+	Point p7(21,10);
+	Point p8(42,90);
+	Point p9(-42,-230);
+	vector<Point> array;
+	array.push_back(p1);
+	array.push_back(p2);
+	array.push_back(p3);
+	array.push_back(p4);
+	array.push_back(p5);
+	array.push_back(p6);
+	array.push_back(p7);
+	array.push_back(p8);
+	array.push_back(p9);
+	int ret = maxPoints(array);
+	
+
+}
+
+
+
+
+
+
