@@ -1,0 +1,194 @@
+#pragma once
+
+struct ListNode {
+     int val;
+     ListNode *next;
+     ListNode(int x) : val(x), next(NULL) {}
+ };
+
+
+//用常数空间复杂度对O(n log n)时的链表排序。
+//使用快速排序
+//前后指针法
+//【left，right】
+//void _sortList(ListNode*  left,ListNode*  right)
+//{
+//	if(left == right)
+//		return  ;
+//	int data = right->val;
+//	ListNode * cur = left; 
+//	ListNode * prev = NULL;
+//	while(cur != right)
+//	{
+//		if(cur->val <= data)
+//		{
+//			if(prev == NULL)
+//			{
+//				prev = left;
+//			}
+//			else
+//			{
+//				prev = prev->next;
+//			}
+//			swap(cur->val,prev->val); 
+//			cur = cur->next;
+//		}
+//		else
+//		{
+//			cur = cur->next;    
+//		}
+//	}
+//	_sortList(left,prev);
+//	if(prev == NULL)
+//	{
+//		prev = left;
+//	}
+//	else
+//	{
+//		prev = prev->next;
+//	}
+//	swap(cur->val,prev->val);
+//	if(prev != right)
+//	{
+//		_sortList(prev->next,right)  ;
+//	}
+//	
+//}
+//ListNode *sortList(ListNode *head) 
+//{
+//	if(head == NULL)
+//		return NULL;
+//	if(head->next == NULL)
+//		return  head;
+//	ListNode*  node = head; 
+//	while(node->next)
+//	{
+//		node = node->next;
+//	}
+//	_sortList(head,node);
+//	return  head;  
+//}
+
+
+
+
+
+
+
+//[left,right)
+ListNode* GetMidNode(ListNode* left,ListNode*  right)
+{
+	ListNode*  fast = left;
+	ListNode*  cur= left;
+	while(fast != right&&fast->next != right)
+	{
+		cur = cur->next;
+		fast = fast->next;
+		if(fast != right)
+			fast= fast->next;
+	}
+	return  cur;    
+}
+//【）
+ListNode* _MergeSort(ListNode*  start,ListNode* end)
+{
+	//表示的只有一个结点
+	if(start->next == end)
+	{
+		start->next = NULL;
+		return  start;
+	}
+	ListNode* mid  = GetMidNode(start,end);
+	ListNode* left = _MergeSort(start,mid);
+	ListNode* right= _MergeSort(mid,end);
+	ListNode*  ret = NULL;
+	ListNode*  tail = NULL;
+	while(left&&right)
+	{
+		if(left->val <= right->val)
+		{
+			if(tail)
+			{
+				tail->next = left;
+				tail = left;
+			}
+			else
+			{
+				ret = left;
+				tail = left;     
+			}
+			left = left->next;
+		}
+		else
+		{
+			if(tail)
+			{
+				tail->next = right; 
+				tail = right;
+			}
+			else
+			{
+				ret = right;
+				tail = right;     
+			}
+			right = right->next;
+		}
+	}
+	while(left)
+	{
+		if(tail)
+		{
+			tail->next = left; 
+			tail = left;
+		}
+		else
+		{
+			ret = left;
+			tail = left;     
+		}
+		left = left->next;
+	}
+	while(right)
+	{    
+		if(tail)
+		{
+			tail->next = right;  
+			tail = right;
+		}
+		else
+		{
+			ret = right;
+			tail = right;     
+		}
+		right = right->next;  
+	}
+	return ret;   
+}
+ListNode *sortList(ListNode *head) 
+{
+	if(head== NULL)
+		return  NULL;
+	if(head->next == NULL)
+		return head;   
+	return _MergeSort(head,NULL);
+
+}
+void Test()
+{
+	ListNode *  l1 =  new ListNode(1);
+	ListNode *  l2 =  new ListNode(2);
+	ListNode *  l3 =  new ListNode(4);
+	ListNode *  l4 =  new ListNode(8);
+	ListNode *  l5 =  new ListNode(6);
+	ListNode *  l6 =  new ListNode(7);
+	ListNode *  l7 =  new ListNode(5);
+	l1->next = l2;
+	l2->next = l3;
+	l3->next = l4;
+	l4->next = l5;
+	l5->next = l6;
+	l6->next = l7;
+	ListNode* ret= sortList(l1);
+	
+
+}
