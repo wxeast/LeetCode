@@ -1,0 +1,70 @@
+#pragma once
+
+#include<vector>
+#include<string>
+#include<unordered_set>
+#include<set>
+
+void _wordBreak(vector<string> &ret,
+						string str,//表示的是要操作的字符串
+						string &src,//表示的题目给的字符串
+						int idex,///当前的字符串走到哪个位置
+						unordered_set<string> &dict,
+						set<int>& size
+						)
+{
+	//表示已经走完了
+	if(idex == src.size())
+	{
+		if(str.size() != 0)
+			ret.push_back(str);
+		return  ;
+	}
+	//要是当前的字符串为不为空的话，那么在尾部加上空格 
+	if(idex != 0)
+		str.push_back(' ');
+	set<int>::iterator len = size.begin();
+	for(; len!= size.end();++len)
+	{
+		int i= *len;
+		if(idex + i > src.size()||i==0)
+			break;
+		string  tmp((char*)src.c_str()+idex,(char*)src.c_str()+idex+i);	
+		unordered_set<string>::iterator it  = dict.find(tmp);
+        if(it != dict.end())
+			_wordBreak(ret,str+tmp,src,idex+i,dict,size);
+	}
+}
+vector<string> wordBreak(string s, unordered_set<string> &dict) {
+	vector<string> ret;
+	if(s.size() == 0||dict.empty() == true)
+		return ret;
+	unordered_set<string>::iterator it  = dict.begin();
+	set<int> size;
+	while(it!= dict.end())
+	{
+		size.insert(it->size());
+		++it;
+	}
+	string  str;
+	_wordBreak(ret,str,s,0,dict,size);
+	return ret;
+}
+void Test()
+{
+	string src("catsanddog");
+	unordered_set<string> dict;
+	string str1("cat");
+	string str2("cats");
+	string str3("and");
+	string str4("sand");
+	string str5("dog");
+	dict.insert(str1);
+	dict.insert(str2);
+	dict.insert(str3);
+	dict.insert(str4);
+	dict.insert(str5);
+
+	vector<string> ret = wordBreak(src,dict);
+
+}
