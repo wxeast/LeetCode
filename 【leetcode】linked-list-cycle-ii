@@ -1,0 +1,47 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    //得到相遇结点 ，，，结点为空表示的是  没有环
+    ListNode *GetMeetNode(ListNode* head)
+    {
+        if(head == NULL)
+            return NULL;
+		//块慢指针法；要是两个指针相遇，表示有环，返回   相遇结点
+        ListNode*  cur = head->next;
+        ListNode*  fast = NULL;
+        if(cur)
+            fast = cur->next;
+        while(fast&&fast != cur)
+        {
+            cur = cur->next;
+            fast = fast->next;
+            if(fast)
+                fast = fast->next;
+        }
+        return  fast;
+        
+    }
+    ListNode *detectCycle(ListNode *head) {
+        ListNode*  node = GetMeetNode(head);
+        if(node == NULL)
+            return NULL;
+        ListNode* cur= head;
+        while(1)
+        {
+            if(cur == node)
+            {
+                return  node;
+            }
+            cur = cur->next;
+            node =node->next;
+        }
+        
+    }
+};
