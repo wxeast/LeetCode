@@ -1,0 +1,47 @@
+#pragma once
+
+//有N个孩子站在一条线上。每个孩子都被赋予一个评分值。
+//你正在给这些孩子们送糖果，这些孩子受到以下要求:
+//每个孩子至少要有一个糖果。
+//得分较高的孩子比他们的邻居得到更多的糖果。
+//你必须给的最小糖果是多少?
+#include<vector>
+
+
+
+int candy(vector<int> &ratings)
+{
+	int  n =  ratings.size();
+	if(n == 0)
+		return  0;
+	if(n== 1)
+		return 1;
+	vector<int> size;
+	size.resize(n,1);
+	for(int i = 1;i < n ;++i)
+	{
+		if(ratings[i] > ratings[i-1])
+		{
+			size[i] = size[i-1]+1;
+		}
+	}
+	for(int i = n-1;i > 0  ;--i)
+	{
+		if(ratings[i-1] > ratings[i]&&size[i-1] < size[i] )
+		{
+			size[i-1] = size[i]+1;
+		}
+	}
+	int ret= 0 ;
+	for(int i = 0 ;i < n;++i)
+	{ret+= size[i];}
+	return ret;
+
+}
+
+void Test()
+{
+	int array[] = {4,2,3,4,1};
+	vector<int> ratings(array,array+5);
+	int ret = candy(ratings);
+}
