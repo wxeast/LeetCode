@@ -1,0 +1,23 @@
+#include<assert.h>
+class Solution {
+public:
+    //给定一组整数，每个元素都出现了三次，除了一个。找到那个单一的。
+	//注意:
+	//你的算法应该有一个线性运行时复杂度。你能否在不使用额外内存的情况下实现它?
+    int singleNumber(int A[], int n) 
+    {
+       int ones = 0;//记录只出现过1次的bits
+       int twos = 0;//记录只出现过2次的bits
+       int threes;
+       for(int i = 0; i < n; i++)
+       {
+         int data = A[i];
+         twos |= ones&data;//要在更新ones前面更新twos
+         ones ^= data;
+         threes = ones&twos;//ones和twos中都为1即出现了3次
+         ones &= ~threes;//抹去出现了3次的bits
+         twos &= ~threes;
+       }
+       return ones;
+    }
+};
