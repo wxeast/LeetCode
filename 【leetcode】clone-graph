@@ -1,0 +1,61 @@
+/**
+ * Definition for undirected graph.
+ * struct UndirectedGraphNode {
+ *     int label;
+ *     vector<UndirectedGraphNode *> neighbors;
+ *     UndirectedGraphNode(int x) : label(x) {};
+ * };
+ */
+#include<queue>
+#include<set>
+#include<unordered_map>
+class Solution {
+public:
+    //使用图的广度或者是深度 遍历  ；
+   UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node)
+  {
+    //使用一个set来计数，判断每个结点遍历的次数；
+    //先使用深度遍历 ；
+    if(node == NULL)
+        return NULL;
+    set<UndirectedGraphNode*> lab;
+	queue<UndirectedGraphNode*> data;
+    unordered_map<int,UndirectedGraphNode*> newNode;
+    UndirectedGraphNode*  cur = node;
+	data.push(cur);
+	 lab.insert(cur);
+	 //遍历一遍这个图 
+	 while(data.empty() == false)
+	 {
+		 cur = data.front();
+		 //当前的结点还没有被访问过
+	     UndirectedGraphNode*  tmp = new UndirectedGraphNode(cur->label);
+		 newNode[cur->label] = tmp;
+		 for(int i = 0 ;i < cur->neighbors.size();++i)
+	     {
+			 if(lab.insert(cur->neighbors[i]).second == true)
+			 {
+				 data.push(cur->neighbors[i]);
+			 }
+		 }
+		data.pop();	
+	 } 
+
+
+	//现在用来解决这些新结点
+	set<UndirectedGraphNode*>::iterator it = lab.begin();
+	while(it != lab.end())
+	{
+		unordered_map<int,UndirectedGraphNode*>::iterator tmp = newNode.find((*it)->label);
+		//给他的邻居赋值
+		for(int i= 0;i < (*it)->neighbors.size();++i)
+		{
+			tmp->second->neighbors.push_back(newNode[(*it)->neighbors[i]->label]);
+		}
+		++it;
+	}
+
+	return newNode[node->label];
+   }
+
+};
