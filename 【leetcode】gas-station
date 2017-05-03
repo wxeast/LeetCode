@@ -1,0 +1,33 @@
+class Solution {
+public:
+    //环形路线上有N个加油站，每个加油站有汽油gas[i]，从每个加油站到下一站消耗汽油cost[i]，
+    //问从哪个加油站出发能够回到起始点，如果都不能则返回-1（注意，解是唯一的）。
+    int canCompleteCircuit(vector<int> &gas, vector<int> &cost) {
+        int size1 = gas.size();
+        int size2 = cost.size();
+        if(size1 != size2)
+            return -1;
+        int curgas =  0;
+        int sumgas = 0 ;
+        int ret= 0 ;
+    	for(int i = 0 ;i < size1;++i)
+        {
+            //表示的是经过当前的加油站，右的剩余
+            curgas += gas[i] - cost[i];
+            sumgas += gas[i] - cost[i];
+            //表示的是不能通过当前的加油站； 那就从下一个加油站出发
+            //当前的油量也要变成是 0 ；
+            if(curgas < 0)
+            {
+               ret = i+1;
+               curgas = 0 ;
+            }
+        }
+        //表示的所有的油耗大于现有的量
+        if(sumgas <  0)
+        	return -1;
+        else
+            return  ret;
+        
+    }
+};
