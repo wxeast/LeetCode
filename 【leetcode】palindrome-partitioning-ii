@@ -1,0 +1,118 @@
+#pragma once
+
+
+#include<string>
+//判断一个字符串是不是回文
+//bool Ispalindrom(string s)
+//{
+//	char  *str = (char *)s.c_str();
+//	int len  =s.size();
+//	int left = 0 ;
+//	int right =len-1;
+//	while(left < right )
+//	{
+//		if(str[left] ==str[right])
+//		{
+//			left++;
+//			right--;
+//		}
+//		else
+//			return false;
+//	}
+//	return true;
+//}
+////判断一个能不能被 cut切割成是回文
+//bool IsCutpalindrom(string s,int cut)
+//{
+//	//要是 cut == 0；只需要判断当前的字符串是不是 回文就好了
+//	if(cut == 0)
+//	{
+//		return Ispalindrom(s);
+//	}
+//
+//	int len =  s.size();
+//	//要是当前要切的   cut还要大于 字符串的长度
+//	//那么  这个字符串肯定  不能够被cut切分
+//	if(cut > len)
+//		return false;
+//	if(len == 0)
+//		return false;
+//	//开始 
+//	for(int i =0 ;i < len;++i)
+//	{
+//		//得到左边的字符串
+//		string left = s.substr(0,i+1);
+//		//得到右边的字符串
+//		string right;
+//		if(i != len-1)
+//		{
+//			right = s.substr(i+1,len-i-1);
+//		}
+//		
+//		if(IsCutpalindrom(left,0)&&IsCutpalindrom(right,cut-1))
+//		{
+//			return true;
+//		}
+//	}
+//	return false;	
+//}
+//int minCut(string s) 
+//{
+//	int ret = 0 ;
+//	int length = s.size();
+//	//要是当前  字符串 长度是   0 或者是 1，那么就不需要切分的
+//	if(length == 0||length == 1)
+//		return 0;
+//	for(int i = 0;i < length;++i )
+//	{
+//
+//		if(IsCutpalindrom(s,i))
+//			return i;
+//	}
+//}
+
+
+
+#include<vector>
+#include<string>
+int minCut(string s) 
+{
+	int length = s.size();
+	if(length == 0||length == 1)
+		return  0;
+	vector<int> mincut;
+	mincut.resize(length);
+	vector<vector<bool>> Ispal;
+	Ispal.resize(length);
+	for(int i = 0 ;i < length;++i)
+	{
+		mincut[i] = length-1-i;
+		Ispal[i].resize(length,false);
+	}
+
+
+	for(int i= length - 1;i >=0 ;--i)
+	{
+		for(int j = i ;j < length;++j)
+		{     
+			if(s[i] == s[j]&&((j - i < 2)||(Ispal[i+1][j-1] == true)))
+			{
+				Ispal[i][j] = true; 
+				if( j == length -1)
+					mincut[i] = 0;  
+			}
+			else
+			{
+
+				mincut[i] = (mincut[i] < mincut[j]+1)?mincut[i]:mincut[j]+1;
+			}
+		}
+	}
+	return mincut[0];    
+
+}
+ void  Test()
+ {
+	 string  str("leet");
+	 int ret =minCut(str);
+ }
