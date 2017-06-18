@@ -1,0 +1,76 @@
+#pragma once
+
+//Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
+//	For example,
+//	Given[100, 4, 200, 1, 3, 2],
+//	The longest consecutive elements sequence is[1, 2, 3, 4]. Return its length:4.
+//	Your algorithm should run in O(n) complexity.
+#include<unordered_map>
+#include<vector>
+int longestConsecutive(vector<int> &num) {
+	//得到顺序表的长度 
+	int n = num.size();
+	if(n ==0 )
+		return 0  ;
+	if(n ==1)
+		return 1  ;
+	int ret = 1;
+	unordered_map<int,int> dmap;
+	for(int i = 0 ;i < n;++i)
+	{	
+		dmap.insert(make_pair(num[i],1));
+	}
+	unordered_map<int,int>::iterator it = dmap.begin();
+	while(it != dmap.end())
+	{
+		if(it->second == 1)
+		{
+			int up = 2;
+			int down = 0;
+			int key = it->first;
+			while(1)
+			{	
+				key ++;
+				unordered_map<int,int>::iterator tmp =  dmap.find(key);
+				//要是找到了这个值 
+				if(tmp!= dmap.end())
+				{	
+					tmp->second = up++;
+				}
+				else
+				{
+					break;
+				}
+			}
+			key = it->first;
+			while(1)
+			{	
+				key --;
+				unordered_map<int,int>::iterator tmp =  dmap.find(key);
+				//要是找到了这个值 
+				if(tmp!= dmap.end())
+				{	
+					tmp->second = down--;
+				}
+				else
+				{
+					break;
+				}
+			}
+			if((up - down) > ret)
+			{
+				ret = up -down-1;
+			}
+		}
+		++it;
+	}
+	return ret;
+}
+
+void Test()
+{
+	int array[] = {100,4,200,1,2,3};
+	vector<int> num(array,array+sizeof(array)/sizeof(array[0]));
+	int ret = longestConsecutive(num);
+}
+
