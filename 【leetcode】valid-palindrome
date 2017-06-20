@@ -1,0 +1,91 @@
+
+
+//Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+//	For example,
+//	"A man, a plan, a canal: Panama"is a palindrome.
+//	"race a car"is not a palindrome.
+//Note: 
+//Have you consider that the string might be empty? This is a good question to ask during an interview.
+//	For the purpose of this problem, we define empty string as valid palindrome.
+//
+#pragma  once
+
+
+#include<stdio.h>
+#include<string>
+	//判断一个字符是不是一个数字，和字母
+	bool isSuitAble(char  c)
+	{
+	
+		if(( c >= '0'&&c<='9')|| (c>= 'A'&&c<='Z')||(c>= 'a'&&c<='z'))
+		{
+			return true;
+		}
+		return false;
+	}
+	bool _isPalindrome(char * start,char* end)
+	{
+		int size = end-start+1;//得到字符串的长度 
+		if(size == 0||size==1)
+			return true;
+		//得到第一个字符还有最后的一个字符
+		while(1)
+		{
+			//只有一个字符 ，或者为空 
+			if(end - start +1  < 2)
+			{
+				return true;
+			}
+			if(isSuitAble(*start)&&isSuitAble(*end))
+			{
+				//考虑到大小写的问题
+				if(*start  == *end 
+					||(*start < *end &&(*start + 32) == *end)
+					||(*start > *end &&(*start - 32) == *end))
+					return  _isPalindrome(start+1,end-1);
+				else
+					return false;
+			}
+			else if(!isSuitAble(*start)&&isSuitAble(*end))
+			{
+				++start;
+			}
+			else if(isSuitAble(*start)&&!isSuitAble(*end))
+			{
+				--end;
+			}
+			else
+			{
+				++start;
+				--end;
+			}
+		}
+		return  false;
+	}
+	//使用递归来实现 
+	bool isPalindrome(string s) {
+		//判断一个字符串是不是一个回文(从左向右读和从右向左读到的字符串是一样的)
+		int size = s.size();
+		if(size == 0||size ==1)
+			return true;
+		char * str = (char *)s.c_str();
+		char * start= str;
+		char * end =  start+size-1;
+		return _isPalindrome(start,end);
+	
+	}
+
+void Test()
+{
+	string s = "`l;`` 1o1 ??;l`";
+	string s1= "";
+	string s2="asddv";
+	string s3="121";
+	bool ret = isPalindrome(s);
+	isPalindrome(s1);
+	isPalindrome(s2);
+	isPalindrome(s3);
+
+
+}
+
